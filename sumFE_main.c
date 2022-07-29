@@ -211,6 +211,7 @@ int main() {
 
     srand(time(NULL));   // Initialization, should only be called once.
 
+    //Generate random values for test purposes
     for (int i = 0; i < NUM; i ++) {
         U[i].plaintext = rand() % 1500; 
         //printf("%ld\n", U[i].plaintext);

@@ -238,8 +238,6 @@ int main() {
 
     FE_decrypt(&t_cipher, msk, p, values);
 
-    //gmp_printf("Decrypted Text: %Zd\n", decryptedOut);
-
     return 1;
 
 }

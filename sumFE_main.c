@@ -135,7 +135,7 @@ void addKeys(int cnt, Users *U, mpz_t msk){
     mpz_clear(res);
 }
 
-void FE_decrypt(Ciphertext *finalcipher, mpz_t msk, mpz_t p, mpz_t *values) {
+void FE_decrypt(Ciphertext *finalcipher, mpz_t msk, mpz_t p, mpz_t *values, mpz_t k) {
     mpz_t res1, res2, res3, fg;
 
     mpz_init(res1);
@@ -153,7 +153,8 @@ void FE_decrypt(Ciphertext *finalcipher, mpz_t msk, mpz_t p, mpz_t *values) {
     mpz_powm(res2, finalcipher->firstcomp, res1, p);
 
     //((cipher->firstcomp ^ p - privateKey - 1) % p) * cipher->secondcomp
-    mpz_mul(res3, res2, finalcipher->secondcomp);
+    //mpz_mul(res3, res2, finalcipher->secondcomp);
+    mpz_mul(res3, res2, k);                             //Test with Light version
 
     // ((cipher->firstcomp ^ p - privateKey - 1) % p) * cipher->secondcomp) % p
     mpz_mod(res3, res3, p);
@@ -183,7 +184,7 @@ void FE_decrypt(Ciphertext *finalcipher, mpz_t msk, mpz_t p, mpz_t *values) {
 }
 
 int main() {
-    mpz_t p,g,q;
+    mpz_t p,g,q,c,k;
 
     unsigned long int r = 5;
 
@@ -236,7 +237,12 @@ int main() {
     //gmp_printf("C1.1: %Zd\n", t_cipher.firstcomp);
     //gmp_printf("C1.2: %Zd\n", t_cipher.secondcomp);
 
-    FE_decrypt(&t_cipher, msk, p, values);
+    //Test out values from the Light version
+    mpz_init_set_str(c, "46655794257124822957913034582763337079693950060891240747643824504318657060202482802306051171671724719821940100201394406313921888226796438934830208024135800204938397086327539414790546827574330807162205031115888327800171140738729890881173197920585330469290234971263277632822080305989680122658086634929597059245", 0);
+    mpz_init_set_str(k, "1834348474419093818243542794723416904412908358753352552499103492731404450433205649295606677290902370377225009645823213033535659111432674766475558607359644759718990586466348623257906191052874007975029897949747672015663696596172221281527379827729930855649381158692468483270820817033155534732890573160287485356321", 0);
+
+    //FE_decrypt(&t_cipher, msk, p, values);
+    FE_decrypt(&t_cipher, k, p, values, c);         //Check out the encrypted values from the Light version
 
     return 1;
 

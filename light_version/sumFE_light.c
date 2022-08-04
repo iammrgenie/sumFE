@@ -118,14 +118,18 @@ int main() {
     Users U;
     genKeyPair(&U, p, g);
 
-    U.plaintext = 123;
+    FILE *kp;
+    kp = fopen("keypair.txt", "w+");
+    mpz_out_str(kp, 0, U.secKey);
+
+    U.plaintext = 1596;
 
     Ciphertext C;
     HE_Encrypt(&C, &U, g, p, r);
 
-    FILE *fp;
-    fp = fopen("ciphertext.txt", "w+");
-    mpz_out_str(fp, 0, C.secondcomp);
+    FILE *cp;
+    cp = fopen("ciphertext.txt", "w+");
+    mpz_out_str(cp, 0, C.secondcomp);
 
     return 1;
 }
